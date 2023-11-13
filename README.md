@@ -13,20 +13,21 @@
 
 ## Main Code
 ```
-import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
 ```
 ```
-# Pairplot to visualize relationships
-sns.pairplot(df, hue="target")
-plt.show()
+# Load the 'tips' dataset from Seaborn
+df = sns.load_dataset('tips')
 
-# Correlation heatmap
-plt.figure(figsize=(10, 8))
-sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
-plt.show()
+# Basic info
+df.info()
+
+# Descriptive statistics
+df.describe()
+
+# Check for missing values
+df.isnull().sum()
 ```
 
 ## Result
