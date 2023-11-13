@@ -1,24 +1,24 @@
-import seaborn as sns
-import matplotlib.pyplot as plt
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
 
-# Load the 'tips' dataset from Seaborn
-df = sns.load_dataset('tips')
+def main():
+    spark = SparkSession.builder.appName("BostonHousePriceAnalysis").getOrCreate()
 
-# Basic info
-df.info()
+    # Load data
+    df = spark.read.csv("boston.csv", header=True, inferSchema=True)
 
-# Descriptive statistics
-df.describe()
+    # Spark SQL query: Average price by number of rooms
+    df.createOrReplaceTempView("house_prices")
+    avg_price_by_rooms = spark.sql("SELECT RM, AVG(MEDV) as avg_price FROM house_prices GROUP BY RM")
 
-# Check for missing values
-df.isnull().sum()
+    # Data Transformation: Filtering houses with more than 4 rooms
+    houses_more_than_4_rooms = df.filter(col("RM") > 4)
 
-# Pairplot to visualize relationships
-sns.pairplot(df, hue="time")  # 'time' is a column in the 'tips' dataset
-plt.show()
+    # Save results
+    avg_price_by_rooms.write.csv("output/avg_price_by_rooms.csv")
+    houses_more_than_4_rooms.write.csv("output/houses_more_than_4_rooms.csv")
 
-# Select only numeric columns for correlation heatmap
-numeric_cols = df.select_dtypes(include=['float64', 'int64'])
-plt.figure(figsize=(10, 8))
-sns.heatmap(numeric_cols.corr(), annot=True, cmap='coolwarm')
-plt.show()
+    spark.stop()
+
+if __name__ == "__main__":
+    main()
