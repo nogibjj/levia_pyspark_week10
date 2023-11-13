@@ -1,5 +1,5 @@
 # test_main.py
-import main  # Assuming your main script is named main.py
+import main  
 
 def test_example():
     # Example test function
