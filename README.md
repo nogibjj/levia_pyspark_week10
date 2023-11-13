@@ -11,6 +11,9 @@
   Create a New Notebook: Click on New Notebook to start a new Jupyter notebook.
   Clone the GitHub Repository: (Optional) If the notebook is hosted on GitHub, you can clone it directly into Google Colab.
 
+## Google Colab Link
+https://colab.research.google.com/drive/1r1uVyrKdG3y6_gTwDXgwSY5ynr7y_7wl?usp=sharing
+
 ## Main Code
 ```
 import seaborn as sns
@@ -28,6 +31,17 @@ df.describe()
 
 # Check for missing values
 df.isnull().sum()
+```
+```
+# Pairplot to visualize relationships
+sns.pairplot(df, hue="time")  # 'time' is a column in the 'tips' dataset
+plt.show()
+
+# Select only numeric columns for correlation heatmap
+numeric_cols = df.select_dtypes(include=['float64', 'int64'])
+plt.figure(figsize=(10, 8))
+sns.heatmap(numeric_cols.corr(), annot=True, cmap='coolwarm')
+plt.show()
 ```
 
 ## Result
