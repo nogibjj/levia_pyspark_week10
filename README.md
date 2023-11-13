@@ -31,8 +31,8 @@ plt.show()
 
 ## Result
   Relationships
-  ![Relationships](images/relation.png)
+  ![Relationships](relation.png)
   Heatmap
-  ![Heatmap](images/heatmap.png)
+  ![Heatmap](heatmap.png)
 
 
