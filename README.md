@@ -1,53 +1,33 @@
-#  Cloud-Hosted Notebooks
+#  PySpark Project
 
   Welcome to my project! This repository contains all the code and resources related to the project.
 
-## Getting Started
-### Prerequisites
-  A Google account for accessing Google Colab.
-  Basic knowledge of Python and data manipulation libraries.
-### Setting up the Notebook
-  Open Google Colab: Visit Google Colab and sign in with your Google account.
-  Create a New Notebook: Click on New Notebook to start a new Jupyter notebook.
-  Clone the GitHub Repository: (Optional) If the notebook is hosted on GitHub, you can clone it directly into Google Colab.
+## Overview
+This project processes the Boston House Price dataset using PySpark. It includes a Spark SQL query and a data transformation.
 
-## Google Colab Link
-https://colab.research.google.com/drive/1r1uVyrKdG3y6_gTwDXgwSY5ynr7y_7wl?usp=sharing
+## Setup
+- Install dependencies: `pip install pyspark pytest`
+- Download the Boston House Price dataset from Kaggle and place it in the project directory.
 
 ## Main Code
 ```
-import seaborn as sns
-import matplotlib.pyplot as plt
-```
-```
-# Load the 'tips' dataset from Seaborn
-df = sns.load_dataset('tips')
+    # Load data
+    df = spark.read.csv("boston.csv", header=True, inferSchema=True)
 
-# Basic info
-df.info()
+    # Spark SQL query: Average price by number of rooms
+    df.createOrReplaceTempView("house_prices")
+    avg_price_by_rooms = spark.sql("SELECT RM, AVG(MEDV) as avg_price FROM house_prices GROUP BY RM")
 
-# Descriptive statistics
-df.describe()
+    # Data Transformation: Filtering houses with more than 4 rooms
+    houses_more_than_4_rooms = df.filter(col("RM") > 4)
 
-# Check for missing values
-df.isnull().sum()
-```
-```
-# Pairplot to visualize relationships
-sns.pairplot(df, hue="time")  # 'time' is a column in the 'tips' dataset
-plt.show()
-
-# Select only numeric columns for correlation heatmap
-numeric_cols = df.select_dtypes(include=['float64', 'int64'])
-plt.figure(figsize=(10, 8))
-sns.heatmap(numeric_cols.corr(), annot=True, cmap='coolwarm')
-plt.show()
+    # Save results
+    avg_price_by_rooms.write.csv("output/avg_price_by_rooms.csv")
+    houses_more_than_4_rooms.write.csv("output/houses_more_than_4_rooms.csv")
 ```
 
-## Result
-  Relationships
-  ![Relationships](relation.png)
-  Heatmap
-  ![Heatmap](heatmap.png)
+## Output
+Average price by the number of rooms
+Data of houses with more than 4 rooms
 
 
