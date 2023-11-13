@@ -1,11 +1,20 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
+from sklearn.datasets import fetch_openml
 
-iris = load_iris()
-df = pd.DataFrame(iris.data, columns=iris.feature_names)
-df['target'] = iris.target
+# Fetch the Iris dataset
+iris = fetch_openml(name='iris', version=1)
+data = iris.data
+feature_names = data.columns
+target = iris.target
+
+# Convert target to numeric if it's in string format
+target = pd.Categorical(target).codes
+
+# Create a DataFrame
+df = pd.DataFrame(data, columns=feature_names)
+df['target'] = target
 
 # Basic info
 df.info()
