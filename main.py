@@ -1,4 +1,3 @@
-
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -18,7 +17,8 @@ df.isnull().sum()
 sns.pairplot(df, hue="time")  # 'time' is a column in the 'tips' dataset
 plt.show()
 
-# Correlation heatmap
+# Select only numeric columns for correlation heatmap
+numeric_cols = df.select_dtypes(include=['float64', 'int64'])
 plt.figure(figsize=(10, 8))
-sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+sns.heatmap(numeric_cols.corr(), annot=True, cmap='coolwarm')
 plt.show()
